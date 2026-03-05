@@ -1,66 +1,75 @@
 let cash = 1000000;
 let btc = 0;
 
-function updateUI() {
+function updateUI(){
 
-    document.getElementById("cash").innerText =
-        cash.toLocaleString();
+let price = prices[currentIndex];
 
-    document.getElementById("btc").innerText =
-        btc.toFixed(6);
+document.getElementById("cash").innerText =
+Math.floor(cash).toLocaleString();
 
-    let price = prices[currentIndex];
+document.getElementById("btc").innerText =
+btc.toFixed(6);
 
-    let total = cash + btc * price;
+let total = cash + btc * price;
 
-    document.getElementById("total").innerText =
-        Math.floor(total).toLocaleString();
+document.getElementById("total").innerText =
+Math.floor(total).toLocaleString();
+
 }
 
-function buy() {
+function buy(){
 
-    let price = prices[currentIndex];
+let price = prices[currentIndex];
 
-    let yen = Number(
-        document.getElementById("tradeYen").value
-    );
+let yen = Number(
+document.getElementById("tradeAmount").value
+);
 
-    if (yen > cash) return;
-
-    let amount = yen / price;
-
-    btc += amount;
-    cash -= yen;
-
-    buyPoints.push({
-        index: currentIndex,
-        price: price
-    });
-
-    updateUI();
-    drawChart();
+if(yen > cash){
+alert("お金が足りません");
+return;
 }
 
-function sell() {
+let amount = yen / price;
 
-    let price = prices[currentIndex];
+btc += amount;
+cash -= yen;
 
-    let yen = Number(
-        document.getElementById("tradeYen").value
-    );
+buyPoints.push({
+index: currentIndex,
+price: price
+});
 
-    let amount = yen / price;
+updateUI();
+drawChart();
 
-    if (amount > btc) return;
+}
 
-    btc -= amount;
-    cash += yen;
+function sell(){
 
-    sellPoints.push({
-        index: currentIndex,
-        price: price
-    });
+let price = prices[currentIndex];
 
-    updateUI();
-    drawChart();
+let yen = Number(
+document.getElementById("tradeAmount").value
+);
+
+let amount = yen / price;
+
+if(amount > btc){
+alert("BTCが足りません");
+return;
+}
+
+btc -= amount;
+cash += yen;
+
+sellPoints.push({
+index: currentIndex,
+price: price
+});
+
+updateUI();
+drawChart();
+
 }
