@@ -1,128 +1,48 @@
-// engine.js
+let index = 0;
 
-let btcData = []
+let playing = false;
 
-let index = 300
-
-let displayRange = 200
-
-let timer = null
-
-let speed = 1
-
-
-
-async function loadBTC() {
-
-const res = await fetch("bitcoin.csv")
-
-const text = await res.text()
-
-const rows = text.split("\n")
-
-for(let i=1;i<rows.length;i++){
-
-const c = rows[i].split(",")
-
-btcData.push({
-
-date:c[0],
-price:parseFloat(c[1])
-
-})
-
-}
-
-initChart()
-
-updateAll()
-
-}
-
-
-
-function step(){
-
-index++
-
-if(index >= btcData.length){
-
-pause()
-
-}
-
-updateAll()
-
-}
-
+let speed = 1; // 再生速度
 
 
 function play(){
-
-if(timer) return
-
-timer = setInterval(()=>{
-
-for(let i=0;i<speed;i++) step()
-
-},200)
-
+playing = true;
 }
-
 
 
 function pause(){
-
-clearInterval(timer)
-
-timer = null
-
+playing = false;
 }
-
-
-
-function setRange(r){
-
-displayRange = r
-
-updateAll()
-
-}
-
 
 
 function setSpeed(s){
+speed = s;
+}
 
-speed = s
+
+function tick(){
+
+if(!playing) return;
+
+for(let i=0;i<speed;i++){
+
+index++;
+
+if(index >= btcData.length){
+
+index = btcData.length - 1;
+
+pause();
+
+break;
+
+}
+
+}
+
+updateGame();
 
 }
 
 
-
-function updateAll(){
-
-const start = Math.max(0,index-displayRange)
-
-const end = index
-
-updateChart(btcData,start,end,trades)
-
-updateUI()
-
-}
-
-
-
-function currentPrice(){
-
-return btcData[index].price
-
-}
-
-
-
-function currentDate(){
-
-return btcData[index].date
-
-}
+setInterval(tick,200);
