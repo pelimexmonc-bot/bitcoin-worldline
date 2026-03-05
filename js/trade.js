@@ -85,12 +85,12 @@ let total = cash + btc * price;
 
 
 document.getElementById("cash").innerText =
-cash.toFixed(2);
+cash.toLocaleString();
 
 document.getElementById("btc").innerText =
 btc.toFixed(4);
 
 document.getElementById("total").innerText =
-total.toFixed(2);
+total.toLocaleString();
 
 }
