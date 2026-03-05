@@ -8,15 +8,15 @@ fetch("data/bitcoin.csv")
 
 .then(csv=>{
 
-const rows = csv.split("\n").slice(1);
+const rows = csv.trim().split("\n");
 
 btcData = rows.map(r=>{
 
-const parts = r.split(/\s+/);
+const parts = r.split("\t");
 
 return{
 date:parts[0],
-price:parseFloat(parts[1])
+price:Number(parts[1])
 };
 
 });
@@ -31,7 +31,6 @@ randomStart();
 });
 
 }
-
 
 
 function setupSlider(){
