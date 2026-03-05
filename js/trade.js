@@ -1,44 +1,63 @@
-let cash = 10000;
-let btc = 0;
+// trade.js
+
+let cash = 10000
+
+let btc = 0
+
+let trades = []
+
+
 
 function buy(){
 
-let price = btcData[index].price;
+const price = currentPrice()
 
-if(cash <= 0) return;
+if(cash <= 0) return
 
-btc += cash/price;
+const amount = cash / price
 
-cash = 0;
+btc += amount
 
-updatePortfolio();
+cash = 0
+
+trades.push({
+
+type:"buy",
+index:index
+
+})
+
+updateAll()
 
 }
+
+
 
 function sell(){
 
-let price = btcData[index].price;
+const price = currentPrice()
 
-if(btc <= 0) return;
+if(btc <= 0) return
 
-cash += btc*price;
+cash += btc * price
 
-btc = 0;
+btc = 0
 
-updatePortfolio();
+trades.push({
+
+type:"sell",
+index:index
+
+})
+
+updateAll()
 
 }
 
-function updatePortfolio(){
 
-let price = btcData[index].price;
 
-let total = cash + btc*price;
+function totalAsset(){
 
-document.getElementById("cash").innerText = cash.toFixed(2);
-
-document.getElementById("btc").innerText = btc.toFixed(4);
-
-document.getElementById("total").innerText = total.toFixed(2);
+return cash + btc * currentPrice()
 
 }
