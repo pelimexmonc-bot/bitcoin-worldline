@@ -15,17 +15,14 @@ btcData = rows.map(r=>{
 const parts = r.split(",");
 
 return{
-date:parts[0],
+date:parts[0].trim(),
 price:Number(parts[1])
 };
 
 });
 
-
 initChart();
-
 setupSlider();
-
 randomStart();
 
 });
@@ -38,16 +35,15 @@ function setupSlider(){
 const slider = document.getElementById("rangeSlider");
 const label = document.getElementById("rangeValue");
 
+if(!slider) return;
 
 label.innerText = slider.value;
 
 viewRange = parseInt(slider.value);
 
-
 slider.addEventListener("input",()=>{
 
 viewRange = parseInt(slider.value);
-
 label.innerText = slider.value;
 
 updateChart();
@@ -57,22 +53,19 @@ updateChart();
 }
 
 
-
 function updateGame(){
 
 const day = btcData[index];
 
-document.getElementById("date").innerText = day.date;
+if(!day) return;
 
+document.getElementById("date").innerText = day.date;
 document.getElementById("price").innerText = day.price;
 
-
 updatePortfolio();
-
 updateChart();
 
 }
-
 
 
 function randomStart(){
@@ -82,7 +75,6 @@ index = Math.floor(Math.random()*btcData.length);
 updateGame();
 
 }
-
 
 
 function jumpToDate(){
@@ -100,7 +92,6 @@ return new Date(d.date).toDateString() === target.toDateString();
 if(found !== -1){
 
 index = found;
-
 updateGame();
 
 }else{
@@ -110,7 +101,5 @@ alert("Date not found");
 }
 
 }
-
-
 
 loadCSV();
