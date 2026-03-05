@@ -41,6 +41,19 @@ color:"white"
 },
 
 scales:{
+x:{
+ticks:{color:"#aaa"},
+grid:{color:"#333"}
+},
+y:{
+ticks:{color:"#aaa"},
+grid:{color:"#333"}
+}
+}
+
+},
+
+scales:{
 
 x:{
 ticks:{
