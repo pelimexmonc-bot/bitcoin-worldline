@@ -3,28 +3,36 @@ let btcData = [];
 function loadCSV(){
 
 fetch("bitcoin.csv")
+.then(res => res.text())
+.then(csv => {
 
-.then(res=>res.text())
+const rows = csv.split("\n")
+.slice(1)
+.filter(r => r.trim() !== "");
 
-.then(csv=>{
-
-const rows = csv.split("\n").slice(1);
-
-btcData = rows.map(r=>{
+btcData = rows.map(r => {
 
 const parts = r.split(",");
 
-return{
+const date = parts[0]
+.replace(/"/g,"")
+.replace(/\//g,"-")
+.trim();
 
-date:parts[0],
-price:parseFloat(parts[1])
+const price = parseFloat(
+parts[1]
+.replace(/"/g,"")
+.trim()
+);
 
+return {
+date: date,
+price: isNaN(price) ? 0 : price
 };
 
 });
 
 initChart();
-
 randomStart();
 
 });
@@ -33,21 +41,21 @@ randomStart();
 
 function updateGame(){
 
+if(!btcData[index]) return;
+
 const day = btcData[index];
 
 document.getElementById("date").innerText = day.date;
-
-document.getElementById("price").innerText = day.price;
+document.getElementById("price").innerText = day.price.toFixed(2);
 
 updatePortfolio();
-
 updateChart();
 
 }
 
 function randomStart(){
 
-index = Math.floor(Math.random()*btcData.length);
+index = Math.floor(Math.random() * (btcData.length - 300));
 
 updateGame();
 
@@ -57,12 +65,11 @@ function jumpToDate(){
 
 let input = document.getElementById("jumpDate").value;
 
-let found = btcData.findIndex(d=>d.date===input);
+let found = btcData.findIndex(d => d.date === input);
 
 if(found !== -1){
 
 index = found;
-
 updateGame();
 
 }
