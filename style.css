@@ -1,48 +1,10 @@
-body{
+canvas{
 
-background:#111;
-color:white;
-font-family:Arial;
-text-align:center;
-
-}
-
-button{
-
-padding:10px;
-margin:5px;
-font-size:16px;
-
-}
-
-.info{
-
-font-size:20px;
-margin:20px;
-
-}
-
-.portfolio{
-
-margin:20px;
-font-size:18px;
-
-}
-
-.chart-container{
-
-width:90%;
-max-width:900px;
+width:900px;
 height:320px;
 
 margin:30px auto;
-
-}
-
-canvas{
-
-width:100% !important;
-height:100% !important;
+display:block;
 
 background:#1a1a1a;
 border-radius:8px;
