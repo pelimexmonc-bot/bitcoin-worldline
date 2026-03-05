@@ -24,6 +24,7 @@ btc += amountBTC;
 cash -= amountYen;
 
 updatePortfolio();
+updateChart();
 
 }
 
