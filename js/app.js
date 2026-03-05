@@ -90,13 +90,27 @@ function jumpToDate(){
 
 let input = document.getElementById("jumpDate").value;
 
-let found = btcData.findIndex(d=>d.date===input);
+if(!input) return;
+
+let target = new Date(input).getTime();
+
+let found = btcData.findIndex(d=>{
+
+let dtime = new Date(d.date).getTime();
+
+return dtime === target;
+
+});
 
 if(found !== -1){
 
 index = found;
 
 updateGame();
+
+}else{
+
+alert("Date not found");
 
 }
 
