@@ -1,53 +1,46 @@
 let chart = null;
 
-function initChart() {
+function initChart(){
 
-const ctx = document.getElementById("chart").getContext("2d");
+const ctx = document.getElementById("chart");
 
-chart = new Chart(ctx, {
+chart = new Chart(ctx,{
 
-type: "line",
+type:"line",
 
-data: {
+data:{
+labels:[],
+datasets:[{
 
-labels: [],
+label:"BTC",
 
-datasets: [{
-label: "BTC Price",
-data: [],
-borderColor: "orange",
-borderWidth: 2,
-pointRadius: 0,
-tension: 0
+data:[],
+
+borderColor:"orange",
+borderWidth:2,
+pointRadius:0
+
 }]
 
 },
 
-options: {
+options:{
 
-responsive: true,
-maintainAspectRatio: false,
+responsive:true,
+maintainAspectRatio:false,
 
-animation: false,
+animation:false,
 
-scales: {
+scales:{
 
-x: {
-ticks: {
-maxTicksLimit: 10
+x:{
+ticks:{
+maxTicksLimit:10
 }
 },
 
-y: {
-beginAtZero: false
-}
-
-},
-
-plugins: {
-
-legend: {
-display: false
+y:{
+beginAtZero:false
 }
 
 }
@@ -60,22 +53,22 @@ display: false
 
 
 
-function updateChart() {
+function updateChart(){
 
-if (!chart) return;
+if(!chart) return;
 
-const start = Math.max(0, index - 100);
+const start = Math.max(0,index-100);
 
-const slice = btcData.slice(start, index + 1);
+const slice = btcData.slice(start,index+1);
 
-const labels = [];
-const prices = [];
+const labels=[];
+const prices=[];
 
-slice.forEach(d => {
+slice.forEach(d=>{
 
-if (!d) return;
+if(!d) return;
 
-if (!isNaN(d.price)) {
+if(!isNaN(d.price)){
 
 labels.push(d.date);
 prices.push(d.price);
