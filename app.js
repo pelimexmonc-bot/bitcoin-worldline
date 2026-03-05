@@ -2,7 +2,7 @@ let btcData = [];
 
 function loadCSV(){
 
-fetch("bitcoin.csv")
+fetch("data/bitcoin.csv")
 
 .then(res=>res.text())
 
