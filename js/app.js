@@ -12,7 +12,7 @@ const rows = csv.split("\n").slice(1);
 
 btcData = rows.map(r=>{
 
-const parts = r.split(",");
+const parts = r.split("\t");
 
 return{
 date:parts[0],
