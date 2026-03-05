@@ -63,14 +63,19 @@ updateGame();
 
 function jumpToDate(){
 
-let input = document.getElementById("jumpDate").value;
+const input = document.getElementById("jumpDate").value;
 
-let found = btcData.findIndex(d => d.date === input);
+const found = btcData.findIndex(d => d.date === input);
 
 if(found !== -1){
 
 index = found;
+
 updateGame();
+
+updateChart();
+
+}
 
 }
 
