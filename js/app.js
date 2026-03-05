@@ -1,45 +1,107 @@
-loadBTC()
+let btcData = [];
 
-function updateUI(){
+function loadCSV(){
 
-document.getElementById("date").innerText = currentDate()
+fetch("data/bitcoin.csv")
 
-document.getElementById("price").innerText =
-currentPrice().toFixed(2)
+.then(res=>res.text())
 
-document.getElementById("cash").innerText =
-cash.toFixed(0)
+.then(csv=>{
 
-document.getElementById("btc").innerText =
-btc.toFixed(4)
+const rows = csv.split("\n").slice(1);
 
-document.getElementById("asset").innerText =
-totalAsset().toFixed(0)
+btcData = rows.map(r=>{
 
-}
+const parts = r.split(",");
 
+return{
+date:parts[0],
+price:parseFloat(parts[1])
+};
 
-
-document.getElementById("play").onclick = play
-document.getElementById("pause").onclick = pause
-
-document.getElementById("buy").onclick = buy
-document.getElementById("sell").onclick = sell
+});
 
 
+initChart();
 
-const slider = document.getElementById("rangeSlider")
+setupSlider();
 
-slider.oninput = ()=>{
+randomStart();
 
-setRange(parseInt(slider.value))
+});
 
 }
 
 
 
-document.getElementById("speed").onchange = (e)=>{
+function setupSlider(){
 
-setSpeed(parseInt(e.target.value))
+const slider = document.getElementById("rangeSlider");
+const label = document.getElementById("rangeValue");
+
+
+label.innerText = slider.value;
+
+viewRange = parseInt(slider.value);
+
+
+slider.addEventListener("input",()=>{
+
+viewRange = parseInt(slider.value);
+
+label.innerText = slider.value;
+
+updateChart();
+
+});
 
 }
+
+
+
+function updateGame(){
+
+const day = btcData[index];
+
+document.getElementById("date").innerText = day.date;
+
+document.getElementById("price").innerText = day.price;
+
+
+updatePortfolio();
+
+updateChart();
+
+}
+
+
+
+function randomStart(){
+
+index = Math.floor(Math.random()*btcData.length);
+
+updateGame();
+
+}
+
+
+
+function jumpToDate(){
+
+let input = document.getElementById("jumpDate").value;
+
+let found = btcData.findIndex(d=>d.date===input);
+
+if(found !== -1){
+
+index = found;
+
+updateGame();
+
+}
+
+}
+
+
+
+loadCSV();
