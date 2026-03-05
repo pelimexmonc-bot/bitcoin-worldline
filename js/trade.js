@@ -1,9 +1,5 @@
-let cash = 10000;
-
+let cash = 1000000;   // 初期資金 100万円
 let btc = 0;
-
-let trades = [];
-
 
 function buy(){
 
@@ -28,20 +24,6 @@ updateChart();
 
 }
 
-
-trades.push({
-type:"BUY",
-index:index,
-price:price,
-btc:amount
-});
-
-
-updatePortfolio();
-
-}
-
-
 function sell(){
 
 if(!btcData[index]) return;
@@ -65,34 +47,21 @@ updateChart();
 
 }
 
-
-btc = 0;
-
-updatePortfolio();
-
-}
-
-
-
 function updatePortfolio(){
 
 if(!btcData[index]) return;
 
 let price = btcData[index].price;
 
-if(isNaN(price)) return;
-
-
 let total = cash + btc * price;
 
-
 document.getElementById("cash").innerText =
-cash.toLocaleString();
+Math.floor(cash).toLocaleString();
 
 document.getElementById("btc").innerText =
-btc.toFixed(4);
+btc.toFixed(6);
 
 document.getElementById("total").innerText =
-total.toLocaleString();
+Math.floor(total).toLocaleString();
 
 }
