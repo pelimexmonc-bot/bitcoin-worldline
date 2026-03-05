@@ -1,63 +1,92 @@
-// trade.js
+let cash = 10000;
 
-let cash = 10000
+let btc = 0;
 
-let btc = 0
-
-let trades = []
-
+let trades = [];
 
 
 function buy(){
 
-const price = currentPrice()
+if(!btcData[index]) return;
 
-if(cash <= 0) return
+let price = btcData[index].price;
 
-const amount = cash / price
+if(isNaN(price)) return;
 
-btc += amount
+if(cash <= 0) return;
 
-cash = 0
+
+let amount = cash / price;
+
+btc += amount;
+
+cash = 0;
+
 
 trades.push({
+type:"BUY",
+index:index,
+price:price,
+btc:amount
+});
 
-type:"buy",
-index:index
 
-})
-
-updateAll()
+updatePortfolio();
 
 }
-
 
 
 function sell(){
 
-const price = currentPrice()
+if(!btcData[index]) return;
 
-if(btc <= 0) return
+let price = btcData[index].price;
 
-cash += btc * price
+if(isNaN(price)) return;
 
-btc = 0
+if(btc <= 0) return;
+
+
+let value = btc * price;
+
+cash += value;
+
 
 trades.push({
+type:"SELL",
+index:index,
+price:price,
+btc:btc
+});
 
-type:"sell",
-index:index
 
-})
+btc = 0;
 
-updateAll()
+updatePortfolio();
 
 }
 
 
 
-function totalAsset(){
+function updatePortfolio(){
 
-return cash + btc * currentPrice()
+if(!btcData[index]) return;
+
+let price = btcData[index].price;
+
+if(isNaN(price)) return;
+
+
+let total = cash + btc * price;
+
+
+document.getElementById("cash").innerText =
+cash.toFixed(2);
+
+document.getElementById("btc").innerText =
+btc.toFixed(4);
+
+document.getElementById("total").innerText =
+total.toFixed(2);
 
 }
