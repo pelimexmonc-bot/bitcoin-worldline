@@ -1,17 +1,10 @@
 canvas{
 
 width:95%;
-max-width:1100px;
-height:500px;
+max-width:1000px;
+height:400px !important;
 
-margin:40px auto;
-
+margin:30px auto;
 display:block;
-
-background:#1a1a1a;
-
-border-radius:10px;
-
-padding:10px;
 
 }
