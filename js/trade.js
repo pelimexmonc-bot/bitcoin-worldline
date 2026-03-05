@@ -22,7 +22,7 @@ SYMBOLS.forEach(s => {
 
 
 function buy(){
-    if(!btcData[index]) return;
+    if(!btcData[index] || !btcData[index].price) return;
 
     let price      = btcData[index].price;
     let amountYen  = Number(document.getElementById("tradeAmount").value);
@@ -46,7 +46,7 @@ function buy(){
 
 
 function sell(){
-    if(!btcData[index]) return;
+    if(!btcData[index] || !btcData[index].price) return;
 
     let price     = btcData[index].price;
     let amountYen = Number(document.getElementById("tradeAmount").value);
