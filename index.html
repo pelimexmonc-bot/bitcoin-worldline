@@ -1,72 +1,107 @@
-<!DOCTYPE html>
-<html>
-<head>
+<script>
 
-<meta charset="UTF-8">
-<title>Bitcoin Worldline</title>
+let chart
 
-<link rel="stylesheet" href="style.css">
+async function loadData(){
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  const res = await fetch("data/bitcoin.csv")
+  const text = await res.text()
 
-</head>
+  const rows = text.trim().split("\n").slice(1)
 
-<body>
+  const labels=[]
+  const prices=[]
 
-<h1>Bitcoin Worldline</h1>
+  rows.forEach(r=>{
+    const cols=r.split(",")
 
-<div class="info">
+    const date=cols[0]
+    const price=parseFloat(cols[1])
 
-<div>Date : <span id="date"></span></div>
-<div>BTC : $<span id="price"></span></div>
+    if(!isNaN(price)){
+      labels.push(date)
+      prices.push(price)
+    }
+  })
 
-</div>
+  const ctx=document.getElementById("btcChart").getContext("2d")
 
-<div class="controls">
+  chart=new Chart(ctx,{
+    type:"line",
+    data:{
+      labels:labels,
+      datasets:[{
+        label:"BTC Price",
+        data:prices,
+        borderColor:"orange",
+        borderWidth:2,
+        pointRadius:0
+      }]
+    },
 
-<button onclick="play()">▶ PLAY</button>
-<button onclick="pause()">⏸ PAUSE</button>
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
 
-</div>
+      scales:{
+        x:{
+          ticks:{ maxTicksLimit:10 }
+        },
+        y:{
+          beginAtZero:false
+        }
+      },
 
-<div class="trade">
+      plugins:{
+        zoom:{
+          pan:{
+            enabled:true,
+            mode:"x"
+          },
 
-<button onclick="buy()">BUY</button>
-<button onclick="sell()">SELL</button>
+          zoom:{
+            wheel:{ enabled:true },
+            pinch:{ enabled:true },
+            mode:"x"
+          }
+        }
+      }
+    },
 
-</div>
+    plugins:[{
+      id:"autoScaleY",
+      afterUpdate(chart){
 
-<div class="jump">
+        const xScale = chart.scales.x
+        const yScale = chart.scales.y
 
-<input type="date" id="jumpDate">
-<button onclick="jumpToDate()">GO</button>
+        const data = chart.data.datasets[0].data
 
-</div>
+        let min=Infinity
+        let max=-Infinity
 
-<div class="start">
+        for(let i=xScale.min;i<=xScale.max;i++){
 
-<button onclick="randomStart()">Random Start</button>
+          const v=data[i]
 
-</div>
+          if(v<min) min=v
+          if(v>max) max=v
+        }
 
-<div class="portfolio">
+        if(min!==Infinity && max!==-Infinity){
 
-<div>Cash : $<span id="cash"></span></div>
-<div>BTC : <span id="btc"></span></div>
-<div>Total : $<span id="total"></span></div>
+          const padding=(max-min)*0.1
 
-</div>
+          yScale.options.min=min-padding
+          yScale.options.max=max+padding
+        }
 
-<div class="chart-container">
+      }
+    }]
+  })
 
-<canvas id="chart"></canvas>
+}
 
-</div>
+loadData()
 
-<script src="chart.js"></script>
-<script src="trade.js"></script>
-<script src="engine.js"></script>
-<script src="app.js"></script>
-
-</body>
-</html>
+</script>
