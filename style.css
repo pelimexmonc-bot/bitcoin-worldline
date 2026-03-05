@@ -1,4 +1,35 @@
-canvas{
+body{
+
+background:#111;
+color:white;
+font-family:Arial;
+text-align:center;
+
+}
+
+button{
+
+padding:10px;
+margin:5px;
+font-size:16px;
+
+}
+
+.info{
+
+font-size:20px;
+margin:20px;
+
+}
+
+.portfolio{
+
+margin:20px;
+font-size:18px;
+
+}
+
+.chart-container{
 
 width:95%;
 max-width:1100px;
@@ -6,10 +37,15 @@ height:420px;
 
 margin:40px auto;
 
-display:block;
+}
+
+canvas{
+
+width:100% !important;
+height:100% !important;
 
 background:#1a1a1a;
+
 border-radius:10px;
-padding:10px;
 
 }
