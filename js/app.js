@@ -95,11 +95,7 @@ if(!input) return;
 let target = new Date(input);
 
 let found = btcData.findIndex(d=>{
-
-let csvDate = new Date(d.date);
-
-return csvDate.getTime() === target.getTime();
-
+return new Date(d.date).toDateString() === target.toDateString();
 });
 
 if(found !== -1){
