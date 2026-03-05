@@ -11,16 +11,21 @@ if(!btcData[index]) return;
 
 let price = btcData[index].price;
 
-if(isNaN(price)) return;
+let amountYen = Number(document.getElementById("tradeAmount").value);
 
-if(cash <= 0) return;
+if(amountYen <= 0) return;
 
+if(amountYen > cash) amountYen = cash;
 
-let amount = cash / price;
+let amountBTC = amountYen / price;
 
-btc += amount;
+btc += amountBTC;
 
-cash = 0;
+cash -= amountYen;
+
+updatePortfolio();
+
+}
 
 
 trades.push({
@@ -42,22 +47,21 @@ if(!btcData[index]) return;
 
 let price = btcData[index].price;
 
-if(isNaN(price)) return;
+let amountYen = Number(document.getElementById("tradeAmount").value);
 
-if(btc <= 0) return;
+if(amountYen <= 0) return;
 
+let btcToSell = amountYen / price;
 
-let value = btc * price;
+if(btcToSell > btc) btcToSell = btc;
 
-cash += value;
+btc -= btcToSell;
 
+cash += btcToSell * price;
 
-trades.push({
-type:"SELL",
-index:index,
-price:price,
-btc:btc
-});
+updatePortfolio();
+
+}
 
 
 btc = 0;
