@@ -8,12 +8,15 @@ function drawChart() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    if (!prices || prices.length === 0) return;
     if (currentIndex <= 1) return;
 
-    let view = prices.slice(0, currentIndex);
+    let view = prices.slice(0, currentIndex + 1);
 
     let max = Math.max(...view);
     let min = Math.min(...view);
+
+    if (max === min) return;
 
     let w = canvas.width;
     let h = canvas.height;
@@ -41,6 +44,8 @@ function drawTrades(view, max, min) {
 
     let w = canvas.width;
     let h = canvas.height;
+
+    ctx.font = "12px Arial";
 
     buyPoints.forEach(t => {
 
