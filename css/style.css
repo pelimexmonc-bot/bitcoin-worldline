@@ -1,47 +1,44 @@
 body{
 
+font-family:sans-serif;
 background:#111;
 color:white;
-font-family:Arial;
 text-align:center;
-
-}
-
-button{
-
-padding:10px;
-margin:5px;
-font-size:16px;
-
-}
-
-.info{
-
-font-size:20px;
-margin:20px;
-
-}
-
-.portfolio{
-
-margin:20px;
-font-size:18px;
-
-}
-
-.chart-container{
-
-width:90%;
-max-width:900px;
-height:400px;
-margin:auto;
 
 }
 
 canvas{
 
-width:100%;
-height:100%;
+max-width:1000px;
+margin:auto;
 
 }
 
+.info{
+
+display:flex;
+justify-content:center;
+gap:20px;
+margin:20px;
+
+}
+
+.controls{
+
+margin:20px;
+
+}
+
+button{
+
+padding:10px 20px;
+margin:5px;
+font-size:16px;
+
+}
+
+.slider{
+
+margin-top:20px;
+
+}
