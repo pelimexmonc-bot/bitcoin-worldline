@@ -19,6 +19,12 @@ btc += amountBTC;
 
 cash -= amountYen;
 
+trades.push({
+type:"BUY",
+index:index,
+price:price
+});
+
 updatePortfolio();
 updateChart();
 
@@ -41,6 +47,12 @@ if(btcToSell > btc) btcToSell = btc;
 btc -= btcToSell;
 
 cash += btcToSell * price;
+
+trades.push({
+type:"SELL",
+index:index,
+price:price
+});
 
 updatePortfolio();
 updateChart();
