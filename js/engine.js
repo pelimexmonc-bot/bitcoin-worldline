@@ -20,8 +20,7 @@ function tick() {
         return;
     }
 
-    updateUI();
-    drawChart();
+updateGame();
 }
 
 setInterval(tick, 200);
