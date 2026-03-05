@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+body { background: #111; color: white; }
+canvas { border: 1px solid red; }
+</style>
+</head>
+<body>
+<canvas id="chart" width="900" height="400"></canvas>
+<script>
+const canvas = document.getElementById("chart");
+const ctx = canvas.getContext("2d");
+
+const PADDING = { top: 20, right: 20, bottom: 40, left: 80 };
+const pl = PADDING.left, pr = PADDING.right;
+const pt = PADDING.top,  pb = PADDING.bottom;
+const chartW = canvas.width - pl - pr;
+const chartH = canvas.height - pt - pb;
+
+// 軸
+ctx.strokeStyle = "#888";
+ctx.lineWidth = 1;
+ctx.beginPath();
+ctx.moveTo(pl, pt);
+ctx.lineTo(pl, pt + chartH);
+ctx.lineTo(pl + chartW, pt + chartH);
+ctx.stroke();
+
+// Y軸ラベル
+ctx.fillStyle = "#ccc";
+ctx.font = "11px Arial";
+ctx.textAlign = "right";
+ctx.fillText("¥1,000,000", pl - 6, pt + 4);
+ctx.fillText("¥500,000",   pl - 6, pt + chartH/2);
+ctx.fillText("¥0",         pl - 6, pt + chartH);
+
+// X軸ラベル
+ctx.textAlign = "center";
+ctx.fillText("2020/01/01", pl,           pt + chartH + 18);
+ctx.fillText("2022/06/01", pl + chartW/2, pt + chartH + 18);
+ctx.fillText("2024/12/31", pl + chartW,  pt + chartH + 18);
+
+console.log("canvas size:", canvas.width, canvas.height);
+console.log("chartW:", chartW, "chartH:", chartH);
+</script>
+</body>
+</html>

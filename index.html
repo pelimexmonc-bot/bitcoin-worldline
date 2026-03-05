@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Bitcoin Worldline</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h1>Bitcoin Worldline</h1>
+<h3>v0.4</h3>
+
+<!-- 銘柄選択 -->
+<div class="symbol-selector">
+  <label>銘柄 : </label>
+  <select id="symbolSelect"></select>
+</div>
+
+<div class="info">
+  <div>銘柄 : <span id="symbolLabel">Bitcoin</span></div>
+  <div>Date : <span id="date"></span></div>
+  <div>価格 : ¥<span id="price"></span></div>
+</div>
+
+<div class="controls">
+  <button onclick="play()">▶ PLAY</button>
+  <button onclick="pause()">⏸ PAUSE</button>
+</div>
+
+<div class="trade-input">
+  金額(円) :
+  <input type="number" id="tradeAmount" value="10000">
+</div>
+
+<div class="trade">
+  <button onclick="buy()">BUY</button>
+  <button onclick="sell()">SELL</button>
+</div>
+
+<div class="jump">
+  <input type="date" id="jumpDate">
+  <button onclick="jumpToDate()">GO</button>
+</div>
+
+<div class="start">
+  <button onclick="randomStart()">Random Start</button>
+</div>
+
+<div class="portfolio">
+  <div>Cash : ¥<span id="cash">0</span></div>
+  <div>Total : ¥<span id="total">0</span></div>
+  <div class="holdings-list" id="holdingsList"></div>
+</div>
+
+<div class="range">
+  表示期間 :
+  <input type="range" id="rangeSlider" min="30" max="2000" value="120" step="10">
+  <span id="rangeValue">120</span> days
+</div>
+
+<div class="chart-container">
+  <canvas id="chart" width="900" height="400"></canvas>
+</div>
+
+<script src="js/chart.js"></script>
+<script src="js/trade.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
