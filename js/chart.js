@@ -4,76 +4,89 @@ const ctx = canvas.getContext("2d");
 let buyPoints = [];
 let sellPoints = [];
 
-function drawChart() {
+function updateChart(){
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    if (!prices || prices.length === 0) return;
-    if (currentIndex <= 1) return;
+    if(!btcData || btcData.length === 0) return;
 
-    let view = prices.slice(0, currentIndex + 1);
+    if(index <= 1) return;
 
-    let max = Math.max(...view);
-    let min = Math.min(...view);
+    // 表示範囲
+    let start = Math.max(0, index - viewRange);
+    let view = btcData.slice(start, index + 1);
 
-    if (max === min) return;
+    let prices = view.map(d=>d.price);
+
+    let max = Math.max(...prices);
+    let min = Math.min(...prices);
 
     let w = canvas.width;
     let h = canvas.height;
 
     ctx.beginPath();
 
-    view.forEach((p, i) => {
+    view.forEach((d,i)=>{
 
-        let x = (i / (view.length - 1)) * w;
-        let y = h - ((p - min) / (max - min)) * h;
+        let x = (i/(view.length-1))*w;
 
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+        let y = h - ((d.price-min)/(max-min))*h;
+
+        if(i===0) ctx.moveTo(x,y);
+        else ctx.lineTo(x,y);
 
     });
 
-    ctx.strokeStyle = "#00ff88";
-    ctx.lineWidth = 2;
+    ctx.strokeStyle="#00ff88";
+    ctx.lineWidth=2;
     ctx.stroke();
 
-    drawTrades(view, max, min);
+    drawTrades(start,max,min,view.length);
 }
 
-function drawTrades(view, max, min) {
+function drawTrades(start,max,min,length){
 
-    let w = canvas.width;
-    let h = canvas.height;
+    let w=canvas.width;
+    let h=canvas.height;
 
-    ctx.font = "12px Arial";
+    ctx.font="12px Arial";
 
-    buyPoints.forEach(t => {
+    buyPoints.forEach(t=>{
 
-        if (t.index >= view.length) return;
+        if(t.index < start) return;
 
-        let x = (t.index / (view.length - 1)) * w;
-        let y = h - ((t.price - min) / (max - min)) * h;
+        let i = t.index-start;
 
-        ctx.fillStyle = "blue";
+        let x=(i/(length-1))*w;
+        let y=h-((t.price-min)/(max-min))*h;
+
+        ctx.fillStyle="blue";
+
         ctx.beginPath();
-        ctx.arc(x, y, 6, 0, Math.PI * 2);
+        ctx.arc(x,y,6,0,Math.PI*2);
         ctx.fill();
 
-        ctx.fillText("B", x - 4, y - 10);
+        ctx.fillText("B",x-4,y-10);
+
     });
 
-    sellPoints.forEach(t => {
+    sellPoints.forEach(t=>{
 
-        if (t.index >= view.length) return;
+        if(t.index < start) return;
 
-        let x = (t.index / (view.length - 1)) * w;
-        let y = h - ((t.price - min) / (max - min)) * h;
+        let i = t.index-start;
 
-        ctx.fillStyle = "red";
+        let x=(i/(length-1))*w;
+        let y=h-((t.price-min)/(max-min))*h;
+
+        ctx.fillStyle="red";
+
         ctx.beginPath();
-        ctx.arc(x, y, 6, 0, Math.PI * 2);
+        ctx.arc(x,y,6,0,Math.PI*2);
         ctx.fill();
 
-        ctx.fillText("S", x - 4, y - 10);
+        ctx.fillText("S",x-4,y-10);
+
     });
+
 }
