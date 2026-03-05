@@ -1,85 +1,81 @@
-// chart.js
+let chart = null;
 
-let chart
+let viewRange = 120;
 
-function initChart() {
+function initChart(){
 
-const ctx = document.getElementById("chart").getContext("2d")
+const ctx = document.getElementById("chart");
 
-chart = new Chart(ctx, {
+chart = new Chart(ctx,{
 
-type: "line",
+type:"line",
 
-data: {
-
-labels: [],
-
-datasets: [
-
-{
-label: "BTC",
-data: [],
-borderColor: "orange",
-pointRadius: 0,
-borderWidth: 2
+data:{
+labels:[],
+datasets:[{
+label:"BTC",
+data:[],
+borderColor:"orange",
+borderWidth:2,
+pointRadius:0
+}]
 },
 
-{
-label: "Trades",
-data: [],
-showLine: false,
-pointRadius: 6
-}
-
-]
-
-},
-
-options: {
-
-animation: false,
-
-plugins:{
-legend:{display:false}
-},
+options:{
+responsive:true,
+maintainAspectRatio:false,
+animation:false,
 
 scales:{
-x:{display:false},
-y:{ticks:{color:"#aaa"}}
+x:{
+ticks:{
+maxTicksLimit:10
+}
+},
+
+y:{
+beginAtZero:false
+}
 }
 
 }
 
-})
+});
 
 }
 
-function updateChart(data,start,end,trades) {
 
-const view = data.slice(start,end)
+function updateChart(){
 
-chart.data.labels = view.map(v=>v.date)
+if(!chart) return;
 
-chart.data.datasets[0].data = view.map(v=>v.price)
 
-const markers = []
+const start = Math.max(0, index - viewRange);
 
-for(const t of trades){
+const slice = btcData.slice(start, index+1);
 
-if(t.index < start) continue
-if(t.index > end) continue
 
-markers.push({
+const labels=[];
+const prices=[];
 
-x: data[t.index].date,
-y: data[t.index].price
 
-})
+slice.forEach(d=>{
+
+if(!d) return;
+
+if(!isNaN(d.price)){
+
+labels.push(d.date);
+prices.push(d.price);
 
 }
 
-chart.data.datasets[1].data = markers
+});
 
-chart.update()
+
+chart.data.labels = labels;
+chart.data.datasets[0].data = prices;
+
+chart.update("none");
 
 }
