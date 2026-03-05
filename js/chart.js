@@ -18,7 +18,8 @@ function updateChart(){
     let view  = btcData.slice(start, index + 1);
     if(view.length < 2) return;
 
-    let prices = view.map(d => d.price);
+    let prices = view.filter(d => d.price !== null).map(d => d.price);
+    if(prices.length < 2) return;
     let max    = Math.max(...prices);
     let min    = Math.min(...prices);
     let range  = (max === min) ? 1 : (max - min);
@@ -75,10 +76,12 @@ function updateChart(){
 
     // 価格ライン
     ctx.beginPath();
+    let started = false;
     view.forEach((d, i) => {
+        if(d.price === null) { started = false; return; }
         let x = toX(i), y = toY(d.price);
-        if(i === 0) ctx.moveTo(x, y);
-        else        ctx.lineTo(x, y);
+        if(!started){ ctx.moveTo(x, y); started = true; }
+        else ctx.lineTo(x, y);
     });
     ctx.strokeStyle = "#00ff88";
     ctx.lineWidth   = 2;
