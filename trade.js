@@ -3,11 +3,12 @@ let btc = 0;
 
 function buy(){
 
-let price = btcData[index]?.price || 0;
+let price = btcData[index].price;
 
-if(price === 0) return;
+if(cash <= 0) return;
 
 btc += cash/price;
+
 cash = 0;
 
 updatePortfolio();
@@ -17,6 +18,8 @@ updatePortfolio();
 function sell(){
 
 let price = btcData[index].price;
+
+if(btc <= 0) return;
 
 cash += btc*price;
 
