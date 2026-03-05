@@ -1,11 +1,37 @@
 body{
- background:#0f172a;
- color:white;
- text-align:center;
- font-family:sans-serif;
+
+background:#111;
+color:white;
+font-family:Arial;
+text-align:center;
+
+}
+
+button{
+
+padding:10px;
+margin:5px;
+font-size:16px;
+
 }
 
 canvas{
- width:90%;
- max-width:800px;
+
+max-width:800px;
+margin:auto;
+
+}
+
+.info{
+
+font-size:20px;
+margin:20px;
+
+}
+
+.portfolio{
+
+margin:20px;
+font-size:18px;
+
 }
