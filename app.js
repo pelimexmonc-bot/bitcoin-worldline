@@ -41,11 +41,7 @@ document.getElementById("price").innerText = day.price;
 
 updatePortfolio();
 
-if(index % 5 === 0){
-
 updateChart();
-
-}
 
 }
 
