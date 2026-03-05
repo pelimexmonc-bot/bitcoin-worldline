@@ -2,7 +2,7 @@ let chart;
 
 function initChart(){
 
-const ctx = document.getElementById("chart");
+const ctx = document.getElementById("chart").getContext("2d");
 
 chart = new Chart(ctx,{
 
@@ -15,14 +15,54 @@ datasets:[{
 label:"BTC Price",
 
 data:[],
+
 borderColor:"orange",
+backgroundColor:"rgba(255,165,0,0.1)",
+
+borderWidth:2,
+pointRadius:0,
+tension:0.2,
 
 }]
-
 },
 
 options:{
-animation:false
+
+responsive:true,
+maintainAspectRatio:false,
+animation:false,
+
+plugins:{
+legend:{
+labels:{
+color:"white"
+}
+}
+},
+
+scales:{
+
+x:{
+ticks:{
+color:"#aaa",
+maxTicksLimit:10
+},
+grid:{
+color:"#333"
+}
+},
+
+y:{
+ticks:{
+color:"#aaa"
+},
+grid:{
+color:"#333"
+}
+}
+
+}
+
 }
 
 });
@@ -31,11 +71,14 @@ animation:false
 
 function updateChart(){
 
+if(!chart || btcData.length === 0) return;
+
 const start = Math.max(0,index-100);
 
-const slice = btcData.slice(start,index);
+const slice = btcData.slice(start,index+1);
 
 chart.data.labels = slice.map(d=>d.date);
+
 chart.data.datasets[0].data = slice.map(d=>d.price);
 
 chart.update();
