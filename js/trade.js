@@ -61,6 +61,7 @@ btc -= btcToSell;
 cash += btcToSell * price;
 
 updatePortfolio();
+updateChart();
 
 }
 
