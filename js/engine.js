@@ -1,48 +1,27 @@
-let index = 0;
-
 let playing = false;
+let currentIndex = 0;
 
-let speed = 1; // 再生速度
-
-
-function play(){
-playing = true;
+function play() {
+    playing = true;
 }
 
-
-function pause(){
-playing = false;
+function pause() {
+    playing = false;
 }
 
+function tick() {
 
-function setSpeed(s){
-speed = s;
+    if (!playing) return;
+
+    currentIndex++;
+
+    if (currentIndex >= prices.length) {
+        pause();
+        return;
+    }
+
+    updateUI();
+    drawChart();
 }
 
-
-function tick(){
-
-if(!playing) return;
-
-for(let i=0;i<speed;i++){
-
-index++;
-
-if(index >= btcData.length){
-
-index = btcData.length - 1;
-
-pause();
-
-break;
-
-}
-
-}
-
-updateGame();
-
-}
-
-
-setInterval(tick,200);
+setInterval(tick, 200);
