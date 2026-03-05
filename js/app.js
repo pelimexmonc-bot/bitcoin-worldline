@@ -1,79 +1,237 @@
+let btcData=[]
+let index=200
 
-let btcData = [];
+let cash=10000
+let btc=0
 
-function loadCSV(){
+let displayRange=200
 
-fetch("data/bitcoin.csv")
+let timer=null
 
-.then(res=>res.text())
+let speed=1
 
-.then(csv=>{
+let trades=[]
 
-const rows = csv.split("\n").slice(1);
 
-btcData = rows.map(r=>{
 
-const parts = r.split(",");
+async function loadData(){
 
-return{
+const res=await fetch("btc.csv")
+const text=await res.text()
 
-date:parts[0],
-price:parseFloat(parts[1])
+const rows=text.split("\n")
 
-};
+for(let i=1;i<rows.length;i++){
 
-});
+const c=rows[i].split(",")
 
-initChart();
+btcData.push({
 
-randomStart();
+date:c[0],
+price:parseFloat(c[1])
 
-});
+})
+
+}
+
+initChart()
+
+update()
+
+}
+
+loadData()
+
+
+const ctx=document.getElementById("chart").getContext("2d")
+
+let chart
+
+function initChart(){
+
+chart=new Chart(ctx,{
+
+type:"line",
+
+data:{
+labels:[],
+datasets:[
+
+{
+label:"BTC",
+data:[],
+borderColor:"orange",
+pointRadius:0
+}
+
+]
+
+},
+
+options:{
+animation:false,
+scales:{
+x:{display:false}
+}
+}
+
+})
+
+update()
+
+}
+
+
+function update(){
+
+const start=Math.max(0,index-displayRange)
+const end=index
+
+const view=btcData.slice(start,end)
+
+chart.data.labels=view.map(v=>v.date)
+chart.data.datasets[0].data=view.map(v=>v.price)
+
+chart.update()
+
+const d=btcData[index]
+
+document.getElementById("date").innerText=d.date
+document.getElementById("price").innerText=d.price.toFixed(2)
+
+document.getElementById("cash").innerText=cash.toFixed(0)
+document.getElementById("btc").innerText=btc.toFixed(4)
+
+const asset=cash+btc*d.price
+
+document.getElementById("asset").innerText=asset.toFixed(0)
+
+drawTrades()
+
+}
+
+
+function drawTrades(){
+
+const markers=[]
+
+for(let t of trades){
+
+if(t.index<index-displayRange)continue
+if(t.index>index)continue
+
+markers.push({
+
+x:btcData[t.index].date,
+y:btcData[t.index].price
+
+})
+
+}
+
+}
+
+
+function step(){
+
+index+=1
+
+if(index>=btcData.length){
+
+pause()
+
+}
+
+update()
 
 }
 
 
 
-function updateGame(){
+function play(){
 
-const day = btcData[index];
+if(timer)return
 
-document.getElementById("date").innerText = day.date;
+timer=setInterval(()=>{
 
-document.getElementById("price").innerText = day.price;
+for(let i=0;i<speed;i++)step()
 
-updatePortfolio();
+},200)
 
-updateChart();
+}
+
+function pause(){
+
+clearInterval(timer)
+timer=null
 
 }
 
 
 
-function randomStart(){
+document.getElementById("play").onclick=play
+document.getElementById("pause").onclick=pause
 
-index = Math.floor(Math.random()*btcData.length);
 
-updateGame();
+
+document.getElementById("buy").onclick=()=>{
+
+const price=btcData[index].price
+
+const amount=cash/price
+
+btc+=amount
+cash=0
+
+trades.push({
+
+type:"buy",
+index:index
+
+})
+
+update()
+
+}
+
+
+document.getElementById("sell").onclick=()=>{
+
+const price=btcData[index].price
+
+cash+=btc*price
+btc=0
+
+trades.push({
+
+type:"sell",
+index:index
+
+})
+
+update()
 
 }
 
 
 
-function jumpToDate(){
+const slider=document.getElementById("rangeSlider")
+const label=document.getElementById("rangeLabel")
 
-let input = document.getElementById("jumpDate").value;
+slider.oninput=()=>{
 
-let found = btcData.findIndex(d=>d.date===input);
+displayRange=parseInt(slider.value)
 
-if(found !== -1){
+label.innerText=displayRange
 
-index = found;
-
-updateGame();
-
-}
+update()
 
 }
 
-loadCSV();
+
+
+document.getElementById("speed").onchange=(e)=>{
+
+speed=parseInt(e.target.value)
+
+}
