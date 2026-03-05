@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>Bitcoin Worldline</title>
 <link rel="stylesheet" href="style.css">
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -11,8 +12,51 @@
 
 <h1>Bitcoin Worldline</h1>
 
+<div class="info">
+<div>Date : <span id="date"></span></div>
+<div>BTC : $<span id="price"></span></div>
+</div>
+
+<div class="controls">
+
+<button onclick="play()">▶ PLAY</button>
+<button onclick="pause()">⏸ PAUSE</button>
+
+</div>
+
+<div class="trade">
+
+<button onclick="buy()">BUY</button>
+<button onclick="sell()">SELL</button>
+
+</div>
+
+<div class="jump">
+
+<input type="date" id="jumpDate">
+<button onclick="jumpToDate()">GO</button>
+
+</div>
+
+<div class="start">
+
+<button onclick="randomStart()">Random Start</button>
+
+</div>
+
+<div class="portfolio">
+
+<div>Cash : $<span id="cash"></span></div>
+<div>BTC : <span id="btc"></span></div>
+<div>Total : $<span id="total"></span></div>
+
+</div>
+
 <canvas id="chart"></canvas>
 
+<script src="chart.js"></script>
+<script src="trade.js"></script>
+<script src="engine.js"></script>
 <script src="app.js"></script>
 
 </body>
