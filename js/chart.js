@@ -1,117 +1,74 @@
-let chart = null;
+const canvas = document.getElementById("chart");
+const ctx = canvas.getContext("2d");
 
-let viewRange = 120;
+let buyPoints = [];
+let sellPoints = [];
 
-function initChart(){
+function drawChart() {
 
-const ctx = document.getElementById("chart");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-chart = new Chart(ctx,{
+    if (currentIndex <= 1) return;
 
-type:"line",
+    let view = prices.slice(0, currentIndex);
 
-data:{
-labels:[],
-datasets:[{
-label:"BTC",
-data:[],
-borderColor:"orange",
-borderWidth:2,
-pointRadius:0
-}]
-},
+    let max = Math.max(...view);
+    let min = Math.min(...view);
 
-options:{
-responsive:true,
-maintainAspectRatio:false,
-animation:false,
+    let w = canvas.width;
+    let h = canvas.height;
 
-scales:{
-x:{
-ticks:{
-maxTicksLimit:10
-}
-},
+    ctx.beginPath();
 
-y:{
-beginAtZero:false
-}
-}
+    view.forEach((p, i) => {
 
+        let x = (i / (view.length - 1)) * w;
+        let y = h - ((p - min) / (max - min)) * h;
+
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+
+    });
+
+    ctx.strokeStyle = "#00ff88";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    drawTrades(view, max, min);
 }
 
-});
+function drawTrades(view, max, min) {
 
-}
+    let w = canvas.width;
+    let h = canvas.height;
 
+    buyPoints.forEach(t => {
 
-function updateChart(){
+        if (t.index >= view.length) return;
 
-if(!chart) return;
+        let x = (t.index / (view.length - 1)) * w;
+        let y = h - ((t.price - min) / (max - min)) * h;
 
-const start = Math.max(0,index-viewRange);
+        ctx.fillStyle = "blue";
+        ctx.beginPath();
+        ctx.arc(x, y, 6, 0, Math.PI * 2);
+        ctx.fill();
 
-const slice = btcData.slice(start,index+1);
+        ctx.fillText("B", x - 4, y - 10);
+    });
 
-const labels=[];
-const prices=[];
+    sellPoints.forEach(t => {
 
-slice.forEach(d=>{
-labels.push(d.date);
-prices.push(d.price);
-});
+        if (t.index >= view.length) return;
 
+        let x = (t.index / (view.length - 1)) * w;
+        let y = h - ((t.price - min) / (max - min)) * h;
 
-chart.data.labels = labels;
-chart.data.datasets[0].data = prices;
+        ctx.fillStyle = "red";
+        ctx.beginPath();
+        ctx.arc(x, y, 6, 0, Math.PI * 2);
+        ctx.fill();
 
-/* 売買マーカー */
-
-const buyPoints=[];
-const sellPoints=[];
-
-trades.forEach(t=>{
-
-if(t.index < start || t.index > index) return;
-
-let pos = t.index - start;
-
-if(t.type==="BUY"){
-
-buyPoints.push({
-x:labels[pos],
-y:t.price
-});
-
-}
-
-if(t.type==="SELL"){
-
-sellPoints.push({
-x:labels[pos],
-y:t.price
-});
-
-}
-
-});
-
-chart.data.datasets[1]={
-type:"scatter",
-label:"BUY",
-data:buyPoints,
-pointBackgroundColor:"green",
-pointRadius:6
-};
-
-chart.data.datasets[2]={
-type:"scatter",
-label:"SELL",
-data:sellPoints,
-pointBackgroundColor:"red",
-pointRadius:6
-};
-
-chart.update("none");
-
+        ctx.fillText("S", x - 4, y - 10);
+    });
 }
