@@ -13,10 +13,11 @@ labels:[],
 datasets:[{
 
 label:"BTC Price",
+
 data:[],
 
 borderColor:"orange",
-backgroundColor:"rgba(255,165,0,0.15)",
+backgroundColor:"rgba(255,165,0,0.1)",
 
 borderWidth:2,
 pointRadius:0,
@@ -73,12 +74,12 @@ function updateChart(){
 if(!chart) return;
 if(!btcData || btcData.length === 0) return;
 
-const start = Math.max(0, index - 100);
+const start = Math.max(0,index-100);
 
-const slice = btcData.slice(start, index + 1);
+const slice = btcData.slice(start,index+1);
 
-chart.data.labels = slice.map(d => d.date);
-chart.data.datasets[0].data = slice.map(d => d.price);
+chart.data.labels = slice.map(d=>d.date);
+chart.data.datasets[0].data = slice.map(d=>d.price);
 
 chart.update();
 
