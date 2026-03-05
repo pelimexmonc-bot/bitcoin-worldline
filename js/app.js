@@ -12,7 +12,7 @@ const rows = csv.split("\n").slice(1);
 
 btcData = rows.map(r=>{
 
-const parts = r.split("\t");
+const parts = r.split(/\s+/);
 
 return{
 date:parts[0],
@@ -92,13 +92,13 @@ let input = document.getElementById("jumpDate").value;
 
 if(!input) return;
 
-let target = new Date(input).getTime();
+let target = new Date(input);
 
 let found = btcData.findIndex(d=>{
 
-let dtime = new Date(d.date).getTime();
+let csvDate = new Date(d.date);
 
-return dtime === target;
+return csvDate.getTime() === target.getTime();
 
 });
 
