@@ -1,79 +1,66 @@
-let cash = 1000000;   // 初期資金 100万円
+let cash = 1000000;
 let btc = 0;
 
-function buy(){
+function updateUI() {
 
-if(!btcData[index]) return;
+    document.getElementById("cash").innerText =
+        cash.toLocaleString();
 
-let price = btcData[index].price;
+    document.getElementById("btc").innerText =
+        btc.toFixed(6);
 
-let amountYen = Number(document.getElementById("tradeAmount").value);
+    let price = prices[currentIndex];
 
-if(amountYen <= 0) return;
+    let total = cash + btc * price;
 
-if(amountYen > cash) amountYen = cash;
-
-let amountBTC = amountYen / price;
-
-btc += amountBTC;
-
-cash -= amountYen;
-
-trades.push({
-type:"BUY",
-index:index,
-price:price
-});
-
-updatePortfolio();
-updateChart();
-
+    document.getElementById("total").innerText =
+        Math.floor(total).toLocaleString();
 }
 
-function sell(){
+function buy() {
 
-if(!btcData[index]) return;
+    let price = prices[currentIndex];
 
-let price = btcData[index].price;
+    let yen = Number(
+        document.getElementById("tradeYen").value
+    );
 
-let amountYen = Number(document.getElementById("tradeAmount").value);
+    if (yen > cash) return;
 
-if(amountYen <= 0) return;
+    let amount = yen / price;
 
-let btcToSell = amountYen / price;
+    btc += amount;
+    cash -= yen;
 
-if(btcToSell > btc) btcToSell = btc;
+    buyPoints.push({
+        index: currentIndex,
+        price: price
+    });
 
-btc -= btcToSell;
-
-cash += btcToSell * price;
-
-trades.push({
-type:"SELL",
-index:index,
-price:price
-});
-
-updatePortfolio();
-updateChart();
-
+    updateUI();
+    drawChart();
 }
 
-function updatePortfolio(){
+function sell() {
 
-if(!btcData[index]) return;
+    let price = prices[currentIndex];
 
-let price = btcData[index].price;
+    let yen = Number(
+        document.getElementById("tradeYen").value
+    );
 
-let total = cash + btc * price;
+    let amount = yen / price;
 
-document.getElementById("cash").innerText =
-Math.floor(cash).toLocaleString();
+    if (amount > btc) return;
 
-document.getElementById("btc").innerText =
-btc.toFixed(6);
+    btc -= amount;
+    cash += yen;
 
-document.getElementById("total").innerText =
-Math.floor(total).toLocaleString();
+    sellPoints.push({
+        index: currentIndex,
+        price: price
+    });
 
+    updateUI();
+    drawChart();
 }
