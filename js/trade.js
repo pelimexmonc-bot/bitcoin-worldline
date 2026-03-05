@@ -1,75 +1,99 @@
-let cash = 1000000;
+let cash = 1000000;   // 初期資金（円）
 let btc = 0;
 
-function updateUI(){
-
-let price = prices[currentIndex];
-
-document.getElementById("cash").innerText =
-Math.floor(cash).toLocaleString();
-
-document.getElementById("btc").innerText =
-btc.toFixed(6);
-
-let total = cash + btc * price;
-
-document.getElementById("total").innerText =
-Math.floor(total).toLocaleString();
-
-}
+// トレード履歴
+let trades = [];
 
 function buy(){
 
-let price = prices[currentIndex];
+if(!btcData[index]) return;
 
-let yen = Number(
-document.getElementById("tradeAmount").value
-);
+let price = btcData[index].price;
 
-if(yen > cash){
-alert("お金が足りません");
-return;
+// 入力金額
+let amountYen = Number(document.getElementById("tradeAmount").value);
+
+if(amountYen <= 0) return;
+
+// 現金以上は使えない
+if(amountYen > cash){
+amountYen = cash;
 }
 
-let amount = yen / price;
+let amountBTC = amountYen / price;
 
-btc += amount;
-cash -= yen;
+btc += amountBTC;
+cash -= amountYen;
 
+// チャート表示用
 buyPoints.push({
-index: currentIndex,
-price: price
+index:index,
+price:price
 });
 
-updateUI();
-drawChart();
+// 履歴保存
+trades.push({
+type:"BUY",
+price:price,
+amount:amountBTC,
+date:btcData[index].date
+});
+
+updatePortfolio();
+updateChart();
 
 }
 
 function sell(){
 
-let price = prices[currentIndex];
+if(!btcData[index]) return;
 
-let yen = Number(
-document.getElementById("tradeAmount").value
-);
+let price = btcData[index].price;
 
-let amount = yen / price;
+let amountYen = Number(document.getElementById("tradeAmount").value);
 
-if(amount > btc){
-alert("BTCが足りません");
-return;
+if(amountYen <= 0) return;
+
+// 円 → BTC換算
+let btcToSell = amountYen / price;
+
+// 持っているBTC以上は売れない
+if(btcToSell > btc){
+btcToSell = btc;
 }
 
-btc -= amount;
-cash += yen;
+btc -= btcToSell;
+cash += btcToSell * price;
 
+// チャート表示用
 sellPoints.push({
-index: currentIndex,
-price: price
+index:index,
+price:price
 });
 
-updateUI();
-drawChart();
+// 履歴保存
+trades.push({
+type:"SELL",
+price:price,
+amount:btcToSell,
+date:btcData[index].date
+});
+
+updatePortfolio();
+updateChart();
+
+}
+
+function updatePortfolio(){
+
+if(!btcData[index]) return;
+
+let price = btcData[index].price;
+
+let total = cash + btc * price;
+
+document.getElementById("cash").innerText = Math.floor(cash);
+document.getElementById("btc").innerText = btc.toFixed(4);
+document.getElementById("total").innerText = Math.floor(total);
 
 }
