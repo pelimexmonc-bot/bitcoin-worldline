@@ -1,4 +1,5 @@
 let btcData = [];
+let viewRange = 100;   // 表示する過去日数
 
 function loadCSV(){
 
@@ -15,8 +16,8 @@ btcData = rows.map(r=>{
 const parts = r.split(",");
 
 return{
-date:parts[0].trim(),
-price:Number(parts[1])
+date: parts[0].trim(),
+price: Number(parts[1])
 };
 
 });
@@ -35,11 +36,10 @@ function setupSlider(){
 const slider = document.getElementById("rangeSlider");
 const label = document.getElementById("rangeValue");
 
-if(!slider) return;
-
-label.innerText = slider.value;
+if(!slider || !label) return;
 
 viewRange = parseInt(slider.value);
+label.innerText = slider.value;
 
 slider.addEventListener("input",()=>{
 
@@ -83,10 +83,17 @@ let input = document.getElementById("jumpDate").value;
 
 if(!input) return;
 
+// yyyy-mm-dd → Date
 let target = new Date(input);
 
 let found = btcData.findIndex(d=>{
-return new Date(d.date).toDateString() === target.toDateString();
+
+let d2 = new Date(d.date);
+
+return d2.getFullYear() === target.getFullYear() &&
+       d2.getMonth() === target.getMonth() &&
+       d2.getDate() === target.getDate();
+
 });
 
 if(found !== -1){
@@ -101,5 +108,6 @@ alert("Date not found");
 }
 
 }
+
 
 loadCSV();
